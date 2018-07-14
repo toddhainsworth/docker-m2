@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  fpm:
+    build: ./fpm
+    links:
+      - mysql
+    volumes:
+      - "./magento:/var/www/html"
+  apache:
+    build: ./apache
+    ports: 
+      - "80:80"
+    volumes:
+      - "./apache/conf.d:/usr/local/apache2/conf.d"
+      - "./magento:/usr/local/apache2/htdocs"
+    links:
+      - fpm
+  mysql:
+    image: mysql:5.6.40
+    env_file: mysql.env
