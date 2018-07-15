@@ -1,9 +1,16 @@
-FROM httpd:2.4.33
+FROM webdevops/apache:ubuntu-16.04
 
+RUN apt-get update && apt-get install -y less vim
+
+ARG PHP_UPSTREAM_CONTAINER=fpm
+ARG PHP_UPSTREAM_PORT=9000
+ARG PHP_UPSTREAM_TIMEOUT=60
+ARG DOCUMENT_ROOT=/var/www/
 ARG UID=33
 ARG GID=33
 
-# Thanks Adam :)
-RUN usermod -u $UID www-data \
-    && groupmod -g $GID www-data \
-    && echo "IncludeOptional conf.d/*.conf" >> /usr/local/apache2/conf/httpd.conf
+ENV WEB_PHP_SOCKET=${PHP_UPSTREAM_CONTAINER}:${PHP_UPSTREAM_PORT}
+ENV WEB_DOCUMENT_ROOT=${DOCUMENT_ROOT}
+ENV WEB_PHP_TIMEOUT=${PHP_UPSTREAM_TIMEOUT}
+
+COPY conf.d/global.conf /opt/docker/etc/httpd/vhost.common.d/magneto.conf

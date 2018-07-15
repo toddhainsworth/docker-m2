@@ -6,14 +6,13 @@ services:
     links:
       - mysql
     volumes:
-      - "./magento:/var/www/html"
+      - "./magento:/var/www"
   apache:
     build: ./apache
     ports: 
       - "80:80"
     volumes:
-      - "./apache/conf.d:/usr/local/apache2/conf.d"
-      - "./magento:/usr/local/apache2/htdocs"
+      - "./magento:/var/www"
     links:
       - fpm
   mysql:

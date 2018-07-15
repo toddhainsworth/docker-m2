@@ -19,6 +19,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install -j$(nproc) iconv mcrypt bcmath curl intl mbstring soap gd xsl zip pdo_mysql
 
 COPY php.ini /usr/local/etc/php/conf.d/zz-magento.ini
+COPY www.conf /usr/local/etc/php-fpm.d/zz-magento.conf
 
 RUN usermod -s /bin/bash www-data
 RUN chown www-data:www-data /var/www -R
